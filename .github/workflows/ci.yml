@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
@@ -16,10 +16,12 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          working-directory: ./library_backend
+          ruby-version: ruby-3.4.1
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
+        working-directory: ./library_backend
         run: bin/brakeman --no-pager
 
   lint:
@@ -31,9 +33,10 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: .ruby-version
+          working-directory: ./library_backend
+          ruby-version: ruby-3.4.1
           bundler-cache: true
 
       - name: Lint code for consistent style
+        working-directory: ./library_backend
         run: bin/rubocop -f github
-
