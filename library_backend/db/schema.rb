@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_21_220212) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_21_231205) do
   create_table "books", force: :cascade do |t|
     t.string "title", null: false
     t.string "author", null: false
@@ -23,6 +23,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_21_220212) do
     t.index ["genre"], name: "index_books_on_genre"
     t.index ["isbn"], name: "index_books_on_isbn", unique: true
     t.index ["title"], name: "index_books_on_title"
+  end
+
+  create_table "borrowings", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.datetime "borrowed_at", null: false
+    t.integer "book_id", null: false
+    t.datetime "returned_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_borrowings_on_book_id"
+    t.index ["user_id", "book_id"], name: "index_unique_active_borrowings_on_user_and_book", unique: true
+    t.index ["user_id"], name: "index_borrowings_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -47,5 +59,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_21_220212) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "borrowings", "books"
+  add_foreign_key "borrowings", "users"
   add_foreign_key "sessions", "users"
 end
