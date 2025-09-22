@@ -5,14 +5,6 @@ import { Books } from "../../member/books";
 import { useEffect, useMemo } from "react";
 import { fetchBooks, fetchBorrowedBooks } from "../../utils";
 
-const membersOverdue = () => {
-  return [{name: "Mario", email: "mario@email.com"}]
-}
-
-const booksDueToday = () => [{
-  id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", due_date: "2023-07-15"
-}]
-
 export function Dashboard() {
   const [books, setBooks] = useState([]);
   const [borrwedBooks, setBorrowedBooks] = useState([]);
@@ -25,12 +17,12 @@ export function Dashboard() {
   const totalBorrowedBooks = useMemo(() => borrwedBooks.length, [borrwedBooks]);
   const booksDueToday = useMemo(() => {
     const today = new Date().toISOString().split('T')[0];
-    return borrwedBooks.filter(book => book.due_date === today);
+    return borrwedBooks.filter(book => book.due_date === today).map(borrowing => borrowing.book);
   }, [borrwedBooks]);
   const membersOverdue = useMemo(() => {
     const today = new Date().toISOString().split('T')[0];
 
-    return borrwedBooks.filter(book => book.due_date < today)
+    return borrwedBooks.filter(book => Date.parse(book.due_date) < today).map(borrowing => borrowing.user)
   }, [borrwedBooks]);
 
   return (
@@ -50,9 +42,9 @@ export function Dashboard() {
           <div className="space-y-6 px-4">
             <p>Member Overdue</p>
             <ul className="dark:text-gray-200">
-              {membersOverdue().map(({ name, email }) => (
-                <li key={name}>
-                  {name} - {email}
+              {membersOverdue.map(({ id, name, email_address }) => (
+                <li key={id}>
+                  {name} - {email_address}
                 </li>
               ))}
             </ul>

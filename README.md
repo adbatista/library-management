@@ -34,3 +34,6 @@
 * I am terrible at design, so the frontend is very basic
 * there's no need to use axios, fetch is enough for this case
 * I did not ajust the screen for mobile, it's a desktop only design
+* the frontend is incomplete
+* I decided to not add ransack or some fulltext search, gonna do the search with simple SQL LIKE is not performatic but it's enough for this case
+* I did not add pagination, it's a simple system and the requirements do not say anything about it, I'll do if I have time probably use the gem pagy
