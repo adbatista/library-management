@@ -37,3 +37,4 @@
 * the frontend is incomplete
 * I decided to not add ransack or some fulltext search, gonna do the search with simple SQL LIKE is not performatic but it's enough for this case
 * I did not add pagination, it's a simple system and the requirements do not say anything about it, I'll do if I have time probably use the gem pagy
+* added doc of the api in the readme, did not have time to document using swagger
