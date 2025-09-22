@@ -11,7 +11,7 @@ RSpec.describe "Sessions", :aggregate_failures, type: :request do
       }
 
       post "/session", params: session_params
-      puts response.body
+
       expect(response).to have_http_status(:created)
       expect(JSON.parse(response.body)).to include("token")
     end
