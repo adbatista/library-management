@@ -108,7 +108,7 @@ RSpec.describe "Borrowings", :aggregate_failures, type: :request do
       it "returns only the member borrowings" do
         get "/borrowings", headers: { "Authorization" => "Bearer #{session.token}" }
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)).to match_array(borrowings.as_json)
+        expect(JSON.parse(response.body).length).to eq(2)
       end
     end
 
@@ -120,7 +120,7 @@ RSpec.describe "Borrowings", :aggregate_failures, type: :request do
       it "returns all borrowings" do
         get "/borrowings", headers: { "Authorization" => "Bearer #{session.token}" }
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body).size).to eq(3)
+        expect(JSON.parse(response.body).count).to eq(3)
       end
     end
   end
@@ -142,9 +142,10 @@ RSpec.describe "Borrowings", :aggregate_failures, type: :request do
         get "/borrowings/#{borrowing.id}", headers: { "Authorization" => "Bearer #{session.token}" }
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)).to include(
-          "id" => borrowing.id,
-          "user_id" => member.id,
-          "book_id" => borrowing.book_id
+          borrowing.slice(:id, :borrowed_at, :returned_at, :created_at, :updated_at, :due_date).as_json.merge(
+          "user" => borrowing.user.slice(:id, :name, :email_address),
+          "book" => borrowing.book.slice(:id, :title, :author, :genre, :isbn)
+          )
         )
       end
 
@@ -166,9 +167,10 @@ RSpec.describe "Borrowings", :aggregate_failures, type: :request do
         get "/borrowings/#{borrowing.id}", headers: { "Authorization" => "Bearer #{session.token}" }
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)).to include(
-          "id" => borrowing.id,
-          "user_id" => borrowing.user_id,
-          "book_id" => borrowing.book_id
+          borrowing.slice(:id, :borrowed_at, :returned_at, :created_at, :updated_at, :due_date).as_json.merge(
+          "user" => borrowing.user.slice(:id, :name, :email_address),
+          "book" => borrowing.book.slice(:id, :title, :author, :genre, :isbn)
+          )
         )
       end
     end

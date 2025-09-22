@@ -6,12 +6,12 @@ class BorrowingsController < ApplicationController
   def index
     @borrowings = Borrowing.accessible_by(current_ability)
 
-    render json: @borrowings
+    render :index, formats: :json
   end
 
   # GET /borrowings/1
   def show
-    render json: @borrowing
+    render :show, formats: :json
   end
 
   # POST /borrowings

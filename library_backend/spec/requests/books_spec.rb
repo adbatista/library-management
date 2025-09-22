@@ -176,5 +176,38 @@ RSpec.describe "Books", :aggregate_failures, type: :request do
         expect(JSON.parse(response.body)).to match_array(books.as_json)
       end
     end
+
+    it "filters books by genre" do
+      fiction_book = create(:book, genre: "Drama")
+      _non_fiction_book = create(:book, genre: "Comedy")
+      member = create(:member)
+      session = create(:session, user: member)
+
+      get "/books", params: { term: "Drama" }, headers: { "Authorization" => "Bearer #{session.token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)).to eq([ fiction_book.as_json ])
+    end
+
+    it "searches books by title" do
+      book1 = create(:book, title: "The Great Gatsby", author: "F. Scott Fitzgerald")
+      _book2 = create(:book, title: "To Kill a Mockingbird", author: "Harper Lee")
+      member = create(:member)
+      session = create(:session, user: member)
+
+      get "/books", params: { term: "Gatsby" }, headers: { "Authorization" => "Bearer #{session.token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)).to eq([ book1.as_json ])
+    end
+
+    it "searches books by author" do
+      book1 = create(:book, title: "To Kill a Mockingbird", author: "Harper Lee")
+      _book2 = create(:book, title: "The Great Gatsby", author: "F. Scott Fitzgerald")
+      member = create(:member)
+      session = create(:session, user: member)
+
+      get "/books", params: { term: "Harper" }, headers: { "Authorization" => "Bearer #{session.token}" }
+      expect(response).to have_http_status(:ok)
+      expect(JSON.parse(response.body)).to eq([ book1.as_json ])
+    end
   end
 end
