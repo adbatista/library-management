@@ -24,6 +24,24 @@ jobs:
         working-directory: ./library_backend
         run: bin/brakeman --no-pager
 
+  specs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          working-directory: ./library_backend
+          ruby-version: ruby-3.4.1
+          bundler-cache: true
+
+      - name: Run tests
+        working-directory: ./library_backend
+        run: bundle exec rspec --format documentation
+
   lint:
     runs-on: ubuntu-latest
     steps:
