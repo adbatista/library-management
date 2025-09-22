@@ -29,3 +29,5 @@
 * author field in the book table for this simple case and based on the PDF requirements does not need to be a separate table
 
 * the requirements do not say anythinb about the librarian that maked the book as returned, so I did not add this field
+* I'm not shure if the librarian can also borrow a books, so I did not allow this
+* `They can't borrow the same book multiple times.` I'm assuming once borrowed even if returned they can't borrow it again

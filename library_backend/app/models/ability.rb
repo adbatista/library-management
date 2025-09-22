@@ -6,8 +6,12 @@ class Ability
   def initialize(user)
     if user.librarian?
       can :manage, Book
+      can :update, Borrowing, returned_at: nil
+      can :read, Borrowing
     elsif user.member?
       can :read, Book
+      can :create, Borrowing
+      can :read, Borrowing, user_id: user.id
     end
     # Define abilities for the user here. For example:
     #
